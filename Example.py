@@ -19,7 +19,7 @@ xt = XTSConnect(API_KEY, API_SECRET, source)
 """Using the xt object we created call the interactive login Request"""
 response = xt.interactive_login()
 print("Login: ", response)
-
+print("test")
 
 """Place Order Request"""
 response = xt.place_order(
