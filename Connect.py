@@ -26,7 +26,7 @@ class XTSCommon:
         """Initialize the common variables."""
         self.token = token
         self.userID = userID
-        #self.isInvestorClient = isInvestorClient
+        self.isInvestorClient = isInvestorClient
 
 
 class XTSConnect(XTSCommon):
