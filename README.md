@@ -3,7 +3,7 @@
 This is the XTS Python API Client library , which has both Marketdata and Interactive services.
 API Documentation for XTS-MarketData API and XTS-Trading API can be found in the below link.
 
-https://developers.symphonyfintech.in/doc/apimarketdata/
+https://developers.symphonyfintech.in/doc/apibinarymarketdata/
 
 https://developers.symphonyfintech.in/doc/interactive/
 
@@ -36,7 +36,6 @@ root=https://developers.symphonyfintech.in
 """API Credentials"""  
 APP_KEY = "YOUR_APP_KEY_HERE"
 SECRET_KEY = "YOUR_SECRET_KEY_HERE"
-XTS_API_BASE_URL = "YOUR_CONNECTION_URL"
 broadcastmode = "Full"  #Full, Partial, Binary
 
 
