@@ -15,7 +15,7 @@ import zlib
 API_KEY = ""
 API_SECRET = ""
 source = "WEBAPI"
-broadcastmode = "Partial"  #Full, Partial, Binary
+broadcastmode = "Full"  #Full, Partial, Binary
 
 
 b = bytearray()
@@ -28,8 +28,8 @@ print("Login Response -->", response)
 set_marketDataToken = response['result']['token']
 set_muserID = response['result']['userID'] 
 
-Instruments = [ {'exchangeSegment':2, 'exchangeInstrumentID': 53001}]
-subresponse = xt.send_subscription(Instruments, 1510)
+Instruments = [ {'exchangeSegment':2, 'exchangeInstrumentID': 52168}]
+subresponse = xt.send_subscription(Instruments, 1501)
 print("Subscribe Response -->", subresponse)
 
 class MDSocket_io(socketio.Client):

@@ -46,6 +46,40 @@ class XTSConnect(XTSCommon):
 
     # SSL Flag
     _ssl_flag = cfg.get('SSL', 'disable_ssl')
+    
+    PRODUCT_MIS = "MIS"
+    PRODUCT_NRML = "NRML"
+    PRODUCT_CNC = "CNC"
+
+    # Order types
+    ORDER_TYPE_MARKET = "MARKET"
+    ORDER_TYPE_LIMIT = "LIMIT"
+    ORDER_TYPE_STOPMARKET = "STOPMARKET"
+    ORDER_TYPE_STOPLIMIT = "STOPLIMIT"
+
+    # Transaction type
+    TRANSACTION_TYPE_BUY = "BUY"
+    TRANSACTION_TYPE_SELL = "SELL"
+
+    # Squareoff mode
+    SQUAREOFF_DAYWISE = "DayWise"
+    SQUAREOFF_NETWISE = "Netwise"
+
+    # Squareoff position quantity types
+    SQUAREOFFQUANTITY_EXACTQUANTITY = "ExactQty"
+    SQUAREOFFQUANTITY_PERCENTAGE = "Percentage"
+
+    # Validity
+    VALIDITY_DAY = "DAY"
+
+    # Exchange Segments
+    EXCHANGE_NSECM = "NSECM"
+    EXCHANGE_NSEFO = "NSEFO"
+    EXCHANGE_NSECD = "NSECD"
+    EXCHANGE_MCXFO = "MCXFO"
+    EXCHANGE_BSECM = "BSECM"
+    EXCHANGE_BSEFO = "BSEFO"
+
 
     # URIs to various calls
     _routes = {
@@ -76,6 +110,17 @@ class XTSConnect(XTSCommon):
         "portfolio.dealerpositions": "interactive/portfolio/dealerpositions",
         "order.dealer.status": "/interactive/orders/dealerorderbook",
         "dealer.trades": "/interactive/orders/dealertradebook",
+
+        "order.margindetails":"/interactive/orders/margindetails",
+        "order.comargindetails":"/interactive/orders/comargindetails",
+        "order.comodifymargindetails":"/interactive/orders/comodifymargindetails",
+        "order.bomargindetails":"/interactive/orders/bomargindetails",
+        "order.modifyordermargindetails":"/interactive/orders/modifyordermargindetails",
+
+        "order.spread":"/interactive/orders/spread",
+        "order.gtt":"/interactive/orders/gttorder",
+        "order.gtt.orderbook":"/interactive/orders/gttorderbook",
+       
        
         # Market API endpoints
         "marketdata.prefix": "apimarketdata",
@@ -299,7 +344,6 @@ class XTSConnect(XTSCommon):
                 "orderUniqueIdentifier": orderUniqueIdentifier
             }
             response = self._post('bracketorder.place', json.dumps(params))
-            print(response)
             return response
         except Exception as e:
             return response['description']
@@ -544,6 +588,412 @@ class XTSConnect(XTSCommon):
         except Exception as e:
             return response['description']
 
+    def margindetails(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    productType,
+                    orderType,
+                    orderside,
+                    orderQuantity,
+                    price,
+                    stopPrice,
+                    orderSessionType,
+                    clientID
+                     ):
+        try:
+            params = {
+                "clientID": clientID,
+                "portfolio": [
+                    {
+                        "exchange": exchangeSegment,
+                        "exchangeInstrumentId": exchangeInstrumentID,
+                        "productType": productType,
+                        "orderType": orderType,
+                        "orderSide": orderside,
+                        "quantity": orderQuantity,
+                        "price": price,
+                        "stopPrice": stopPrice,
+                        "userID": clientID,
+                        "orderSessionType": orderSessionType
+                    }
+                ]
+            }
+
+            
+            
+
+            response = self._post('order.margindetails', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def comargindetails(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    orderside,
+                    entryOrderType,
+                    orderQuantity,
+                    entryprice,
+                    stopPrice,
+                    requestId,
+                    clientID
+                     ):
+        try:
+            # appOrderID = int(appOrderID)
+            params = {
+                        "clientID":clientID,
+                        "exchange": exchangeSegment,
+                        "exchangeInstrumentId": exchangeInstrumentID,
+                        "orderSide": orderside,
+                        "entryOrderType":entryOrderType,
+                        "quantity": orderQuantity,
+                        "entryprice": entryprice,
+                        "stopPrice": stopPrice,
+                        "requestId":requestId
+            }
+
+            response = self._post('order.comargindetails', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def comodifymargindetails(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    orderside,
+                    entryOrderType,
+                    orderQuantity,
+                    entryPrice,
+                    stopPrice,
+                    requestId,
+                    orderID,
+                    clientID
+                     ):
+        try:
+            params = {
+                        "clientID":clientID,
+                        "exchange": exchangeSegment,
+                        "exchangeInstrumentId": exchangeInstrumentID,
+                        "orderSide": orderside,
+                        "entryOrderType":entryOrderType,
+                        "quantity": orderQuantity,
+                        "entryPrice": entryPrice,
+                        "stopPrice": stopPrice,
+                        "requestId":requestId,
+                        "orderID":orderID
+            }
+
+            
+            
+
+            response = self._post('order.comodifymargindetails', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def bomargindetails(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    orderside,
+                    entryOrderType,
+                    orderQuantity,
+                    limitPrice,
+                    squarOff,
+                    stopLoss,
+                    clientID
+                     ):
+        try:
+            params = {
+                        "clientID":clientID,
+                        "exchange": exchangeSegment,
+                        "exchangeInstrumentId": exchangeInstrumentID,
+                        "orderSide": orderside,
+                        "entryOrderType":entryOrderType,
+                        "quantity": orderQuantity,
+                        "limitPrice": limitPrice,
+                        "squarOff": squarOff,
+                        "stopLoss":stopLoss
+            }
+
+            
+            
+
+            response = self._post('order.bomargindetails', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def modifyordermargindetails(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    orderside,
+                    orderSessionType,
+                    productType,
+                    orderType,
+                    orderQuantity,
+                    price,
+                    stopPrice,
+                    clientID,
+                    appOrderID
+                     ):
+        try:
+            appOrderID = int(appOrderID)
+            
+            params = {
+                "clientID":clientID,
+                "orderID":appOrderID,
+                "instrumentInformation":{
+                        "exchange": exchangeSegment,
+                        "exchangeInstrumentId": exchangeInstrumentID,
+                        "orderSide": orderside,
+                        "orderSessionType":orderSessionType,
+                        "productType":productType,
+                        "orderType":orderType,
+                        "quantity": orderQuantity,
+                        "price": price,
+                        "stopPrice": stopPrice,
+            }
+            }
+
+            response = self._post('order.modifyordermargindetails', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+
+
+
+    def place_spread_order(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    productType,
+                    action,
+                    orderDuration,
+                    orderQuantity,
+                    spreadPrice,
+                    leg1ExchangeSegment,
+                    leg1ExchangeInstrumentID,
+                    leg2ExchangeSegment,
+                    leg2ExchangeInstrumentID,
+                    spreadExchangeInstrumentID,
+                    apiOrderSource,
+                    clientID,
+                    userID
+                    ):
+        """To place an order"""
+        try:
+
+            params = {
+            "exchangeSegment": exchangeSegment,
+            "exchangeInstrumentID": exchangeInstrumentID,
+            "productType": productType,
+            "action": action,
+            "orderDuration": orderDuration,
+            "quantity": orderQuantity,
+            "spreadPrice": spreadPrice,
+            "leg1ExchangeSegment": leg1ExchangeSegment,
+            "leg1ExchangeInstrumentID": leg1ExchangeInstrumentID,
+            "leg2ExchangeSegment": leg2ExchangeSegment,
+            "leg2ExchangeInstrumentID": leg2ExchangeInstrumentID,
+            "spreadExchangeInstrumentID": spreadExchangeInstrumentID,
+            "apiOrderSource": apiOrderSource,
+            "clientID": clientID,
+            "userID":userID
+            }
+            response = self._post('order.spread', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def get_spread_order(self, accountID):
+        """Request Order book gives states of all the orders placed by an user"""
+        try:
+            params = {
+                "accountID":accountID
+            }
+            response = self._get("order.spread", params)
+            return response
+        except Exception as e:
+            return response['description']
+
+    def modify_spread_order(self,
+                    exchangeOrderID,
+                    productType,
+                    action,
+                    orderDuration,
+                    orderQuantity,
+                    spreadPrice,
+                    apporderID,
+                    leg1ExchangeSegment,
+                    leg1ExchangeInstrumentID,
+                    leg2ExchangeSegment,
+                    leg2ExchangeInstrumentID,
+                    spreadExchangeInstrumentID,
+                    apiOrderSource,
+                    clientID=None
+                    ):
+        """To place an order"""
+        try:
+
+            params = {
+            "exchangeOrderID":exchangeOrderID,
+            "productType": productType,
+            "action": action,
+            "orderDuration": orderDuration,
+            "quantity": orderQuantity,
+            "spreadPrice": spreadPrice,
+            "orderID":apporderID,
+            "leg1ExchangeSegment": leg1ExchangeSegment,
+            "leg1ExchangeInstrumentID": leg1ExchangeInstrumentID,
+            "leg2ExchangeSegment": leg2ExchangeSegment,
+            "leg2ExchangeInstrumentID": leg2ExchangeInstrumentID,
+            "spreadExchangeInstrumentID": spreadExchangeInstrumentID,
+            "apiOrderSource": apiOrderSource,
+            "clientID": clientID
+            }
+            
+            params['clientID'] = self.userID
+
+            response = self._put('order.spread', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def cancel_spread_order(self, spreadExchangeSegment, spreadExchangeInstrumentID, exchangeOrderID, appOrderID):
+        try:
+            params = {
+                "spreadExchangeSegment": spreadExchangeSegment,
+                "spreadExchangeInstrumentID":spreadExchangeInstrumentID,
+                "exchangeOrderID":exchangeOrderID,
+                "orderID":appOrderID
+
+                }
+            
+            
+            response = self._delete('order.spread', params)
+            return response
+        except Exception as e:
+            return response['description']   
+
+
+
+    def place_gtt_order(self,
+                    exchangeSegment,
+                    exchangeInstrumentID,
+                    productType,
+                    orderType,
+                    orderSide,
+                    timeInForce,
+                    disclosedQuantity,
+                    orderQuantity,
+                    limitPrice,
+                    stopPrice,
+                    orderUniqueIdentifier,
+                    userID,
+                    clientID
+                    ):
+        """To place an order"""
+        try:
+
+            params = {
+                "exchangeSegment": exchangeSegment,
+                "exchangeInstrumentID": exchangeInstrumentID,
+                "productType": productType,
+                "orderType": orderType,
+                "orderSide": orderSide,
+                "timeInForce": timeInForce,
+                "disclosedQuantity": disclosedQuantity,
+                "orderQuantity": orderQuantity,
+                "limitPrice": limitPrice,
+                "stopPrice": stopPrice,
+                "orderUniqueIdentifier": orderUniqueIdentifier,
+                "userID":userID,
+                "clientID": clientID
+            }
+
+            
+            params['clientID'] = self.userID
+
+            response = self._post('order.gtt', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+ 
+    def modify_gtt_order(self,
+                     orderSessionType,
+                     exchangeInstrumentID,
+                     exchangeSegment,
+                     appOrderID,
+                     modifiedLimitPrice,
+                     orderCategoryType,
+                     modifiedOrderType,
+                     modifiedProductType,
+                     modifiedOrderQuantity,
+                     modifiedStopPrice,
+                     participationCode,
+                     clientID
+                     
+                     ):
+        """The facility to modify your open orders by allowing you to change limit order to market or vice versa,
+        change Price or Quantity of the limit open order, change disclosed quantity or stop-loss of any
+        open stop loss order. """
+        try:
+            params = {
+                "orderSessionType": orderSessionType,
+                "exchangeInstrumentID": exchangeInstrumentID,
+                "exchangeSegment": exchangeSegment,
+                "appOrderID": appOrderID,
+                "modifiedLimitPrice": modifiedLimitPrice,
+                "orderCategoryType": orderCategoryType,
+                "modifiedOrderType": modifiedOrderType,
+                "modifiedProductType": modifiedProductType,
+                "modifiedOrderQuantity": modifiedOrderQuantity,
+                "modifiedStopPrice": modifiedStopPrice,
+                "participationCode": participationCode,
+                "clientID": clientID
+
+            }
+
+            
+            
+
+            response = self._put('order.gtt', json.dumps(params))
+            return response
+        except Exception as e:
+            return response['description']
+
+    def get_gtt_order(self, clientID):
+        """Request Order book gives states of all the orders placed by an user"""
+        try:
+            params = {
+                "clientID":clientID
+            }
+            
+            
+            response = self._get("order.gtt.orderbook", params)
+            return response
+        except Exception as e:
+            return response['description']
+
+    def cancel_gtt_order(self, appOrderID, exchangeSegment, exchangeInstrumentID, clientID, userID):
+        try:
+            params = {
+                "appOrderID": appOrderID,
+                "clientID":clientID,
+                "userID":userID,
+                "exchangeSegment":exchangeSegment,
+                "exchangeInstrumentID":exchangeInstrumentID,
+
+                }
+            
+            
+            response = self._delete('order.gtt', params)
+            return response
+        except Exception as e:
+            return response['description']   
+
+
+
     def interactive_logout(self, clientID=None):
         """This call invalidates the session token and destroys the API session. After this, the user should go
         through login flow again and extract session token from login response before further activities. """
@@ -570,9 +1020,7 @@ class XTSConnect(XTSCommon):
                 "source": self.source
             }
             response = self._post("market.login", params)
-            print(response['result'])
             if "token" in response['result']:
-                print("Token exist")
                 self._set_common_variables(response['result']['token'], response['result']['userID'],False)
             return response 
         except Exception as e:
@@ -743,7 +1191,6 @@ class XTSConnect(XTSCommon):
         uri = self._routes[route].format(params)
         url = urljoin(self.root, uri)
         headers = {}
-        print(self.token)
         if self.token:
             # set authorization header
             headers.update({'Content-Type': 'application/json', 'Authorization': self.token})
